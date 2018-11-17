@@ -26,8 +26,8 @@ filmscore=[]
 html_massage=gethtml(html_b+www)
 
 html_massage=html_massage.decode('utf-8')
-www = re.search(r'rel="next" href="(.*)"',html_massage)
+ww = re.search(r'rel="next" href="(.*)"',html_massage)
 
-print(www)
+print(ww)
 print(1)
 
