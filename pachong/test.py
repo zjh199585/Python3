@@ -16,18 +16,18 @@ def search_html(massage,html):       # massage 为要检索的信息 以 r'' 表
     return result
 
 html_b='https://movie.douban.com/'
-www='people/lingrui1995/collect'
-
+www='people/lingrui1995/collect?start=2550&sort=time&rating=all&filter=all&mode=grid'
+ww=1
 filmname=[]
 filmhtml=[]
 filmscore=[]
 
-for i in range(30) :
+while True :
 
     html_massage=gethtml(html_b+www)
 
-    last_html=search_html(r'rel="next" href="(.*)"',html_massage)
-    www=last_html[0]
+    htmlmassage=html_massage.decode('utf-8')
+    ww = re.search(r'rel="next" href="(.*)"',htmlmassage)
 
     add_filmname=search_html(r'a href=".*?" class="">\
                             <em>(.*?)</em>[\s\S]*?"rating.-t"',html_massage)
@@ -45,8 +45,7 @@ for i in range(30) :
     print(filmname)
     print(len(filmname))
     print(len(filmscore))
-
-
-
-
- 
+    if ww == None:
+        break
+    www=ww.group(1)
+print('end')
