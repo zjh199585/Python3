@@ -76,13 +76,11 @@ for number in range(htmlnumber):
     score=float(score)*2.0
     html_massage=gethtml(filmhtml[number])
     add_filmscore2=search_html(r'class="ll rating_num" property="v:average">(.*?)</strong',html_massage)
-    print(add_filmscore2)
     v=['']
     if add_filmscore2 != v :
         add_filmscore2=float(add_filmscore2[0])
     else :
         add_filmscore2=0
-    print(add_filmscore2*2)
     add_filmscore2=add_filmscore2/score
     add_filmstage=search_html(r'span property="v:genre">(.*?)</span',html_massage)
     add_movie_name=search_html(r'v:starring">(.*?)</',html_massage)
