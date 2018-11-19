@@ -1,11 +1,19 @@
 import urllib.request
 import re
 import time
+import random
+from urllib import request
 
-def gethtml(url):
-
-    page = urllib.request.urlopen(url)
-    html = page.read()
+def ip_gethtml(url,ip):
+    
+    proxy = {'http':ip,'https':ip}    #设置代理ip访问方式，http和https
+    proxy_support = request.ProxyHandler(proxy)    #创建ProxyHandler
+    opener = request.build_opener(proxy_support)    #创建Opener
+    #添加User Angent
+    opener.addheaders = [('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.221 Safari/537.36 SE 2.X MetaSr 1.0')]
+    request.install_opener(opener)    #安装OPener
+    response = request.urlopen(url)    #使用自己安装好的Opener
+    html = response.read()    #读取相应信息并解码
     return html
 
 def search_html(massage,html):       # massage 为要检索的信息 以 r'' 表示的内容   html为网页提取的信息
@@ -33,10 +41,10 @@ filmname=[]
 filmhtml=[]
 filmscore=[]
 ################
-
+ip=['210.72.14.142:80','47.104.201.136:53281']
 while True :
 
-    html_massage=gethtml(html_b+www)
+    html_massage=ip_gethtml(html_b+www,ip[random.randint(0,1)])
 
     htmlmassage=html_massage.decode('utf-8')
     ww = re.search(r'rel="next" href="(.*)"',htmlmassage)
@@ -52,8 +60,6 @@ while True :
     filmname.extend(add_filmname)
     filmhtml.extend(add_filmhtml)
     
-    time.sleep(0.2)
-
     print(filmname)
     print(len(filmname))
     print(len(filmscore))
@@ -61,8 +67,8 @@ while True :
         break
     www=ww.group(1)
 
-text_save('/Users/zhuji/Desktop/Python/filmscore.txt',filmscore)
-text_save('/Users/zhuji/Desktop/Python/filmhtml.txt',filmhtml)
+text_save('/Users/LAAAAA~/Desktop/Python程序/filmscore.txt',filmscore)
+text_save('/Users/LAAAAA~/Desktop/Python程序/filmhtml.txt',filmhtml)
 
 #for 循环初始化值
 htmlnumber=len(filmhtml)
@@ -72,11 +78,10 @@ movie_name=[]
 
 for number in range(htmlnumber):
 
-    time.sleep(0.2)
 
     score=filmscore[number]
     score=float(score)*2.0
-    html_massage=gethtml(filmhtml[number])
+    html_massage=ip_gethtml(filmhtml[number],ip[random.randint(0,1)])
     add_filmscore2=search_html(r'class="ll rating_num" property="v:average">(.*?)</strong',html_massage)
     v=['']
     if add_filmscore2 != v :
@@ -92,8 +97,9 @@ for number in range(htmlnumber):
         filmstage.extend(add_filmstage)
         movie_name.extend(add_movie_name)
     print(filmstage)
+    print(number)
 
-text_save('/Users/zhuji/Desktop/Python/movie_name.txt',movie_name)
-text_save('/Users/zhuji/Desktop/Python/filmstage.txt',filmstage)
+text_save('/Users/LAAAAA~/Desktop/Python程序/movie_name.txt',movie_name)
+text_save('/Users/LAAAAA~/Desktop/Python程序/filmstage.txt',filmstage)
 
 print('end')
